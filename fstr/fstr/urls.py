@@ -5,13 +5,12 @@ from rest_framework import routers
 from passag import views
 
 router = routers.DefaultRouter()
-# router.register(r'pereval', views.PerevalAddedViewset)
 router.register(r'coords', views.CoordsViewset)
-
 router.register(r'uzers', views.UzersViewset)
 
 urlpatterns = [
-    path('pereval/submitData', views.PerevalAddedViewset.as_view()),
+    path('pereval/', views.PerevalList.as_view()),
+    path('pereval/submitData/', views.PerevalAddedViewset.as_view()),
     path('pereval/submitData/<int:pk>', views.PerevalDetails.as_view()),
     path('admin/', admin.site.urls),
     path('swagger-ui/', TemplateView.as_view(
