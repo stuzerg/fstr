@@ -35,6 +35,7 @@ class PerevalAddedSerializer(serializers.ModelSerializer):
    images = ImgSerializer()
    status = serializers.ReadOnlyField()
 
+
    class Meta:
        model = PerevalAdded
        fields =  '__all__'
@@ -55,12 +56,17 @@ class PerevalAddedSerializer(serializers.ModelSerializer):
         validated_data['images'] = images_obj.instance
 
         user_obj = UzersSerializer(data=validated_data['user'])
-        print("""validated_data["user"]""", validated_data['user'])
         user_obj.is_valid(raise_exception=True)
         user_obj.save()
         print(user_obj.instance)
         validated_data['user'] = user_obj.instance
         validated_data['status'] = 'new'
+        if validated_data['level_winter'] is None or validated_data['level_winter'] == 'null':
+            print('level_winter', validated_data['level_winter'])
+            validated_data['level_winter'] = ''
+        if validated_data['level_summer'] is None or validated_data['level_summer'] == 'null':
+            print('level_summer', validated_data['level_summer'])
+            validated_data['level_summer'] = ''
         return PerevalAdded.objects.create(**validated_data)
 
 
