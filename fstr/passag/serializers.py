@@ -7,7 +7,7 @@ class CoordsSerializer(serializers.ModelSerializer):
        model = Coords
        fields = '__all__'
    def create(self, validated_data):
-      # print(validated_data)
+
        return Coords.objects.create(**validated_data)
 
 class UzersSerializer(serializers.ModelSerializer):
@@ -16,6 +16,7 @@ class UzersSerializer(serializers.ModelSerializer):
        fields ='__all__' #['name']
 
    def create(self, validated_data):
+
         return Uzers.objects.create(**validated_data)
 
 
@@ -32,10 +33,12 @@ class PerevalAddedSerializer(serializers.ModelSerializer):
    point = CoordsSerializer(many=False)
    user = UzersSerializer()
    images = ImgSerializer()
+   status = serializers.ReadOnlyField()
 
    class Meta:
        model = PerevalAdded
        fields =  '__all__'
+
 
 
    def create(self, validated_data):
@@ -52,10 +55,12 @@ class PerevalAddedSerializer(serializers.ModelSerializer):
         validated_data['images'] = images_obj.instance
 
         user_obj = UzersSerializer(data=validated_data['user'])
+        print("""validated_data["user"]""", validated_data['user'])
         user_obj.is_valid(raise_exception=True)
         user_obj.save()
         print(user_obj.instance)
         validated_data['user'] = user_obj.instance
+        validated_data['status'] = 'new'
         return PerevalAdded.objects.create(**validated_data)
 
 
@@ -85,7 +90,7 @@ class PerevalPatchSerializer(serializers.ModelSerializer):
            setattr(current_img,_field, validated_data.get('images', instance.images)[_field])
            setattr(instance.images, _field, validated_data.get('images', instance.images)[_field])
        current_img.save()
-       print(current_point.pk, current_img.pk)
+
 
        instance.beautyTitle = validated_data.get('beautyTitle', instance.beautyTitle)
        instance.title = validated_data.get('title', instance.title)
@@ -95,7 +100,7 @@ class PerevalPatchSerializer(serializers.ModelSerializer):
        #instance.user = validated_data.get('user', instance.user)
        instance.level_winter = validated_data.get('level_winter', instance.level_winter)
        instance.level_summer = validated_data.get('level_summer', instance.level_summer)
-       instance.status = 'new'
+       instance.status = validated_data.get('status', instance.status)
 
        instance.save()
 

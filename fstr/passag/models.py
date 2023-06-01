@@ -5,7 +5,7 @@ class Uzers(models.Model):
     name = models.CharField(max_length=20, verbose_name='Имя', blank=False)
     patronymic = models.CharField(max_length=20, verbose_name='Отчество', blank=False)
     email = models.EmailField(max_length=50, verbose_name='эл.почта', blank=False, unique=True)
-    cell = models.IntegerField(help_text='в формате 7903ххххххх', blank=False, verbose_name='сотовый', unique=True)
+    cell = models.IntegerField(help_text='в формате 7903ххххххх', blank=False, verbose_name='сотовый')
     def __str__(self):
         return self.email
 
@@ -28,11 +28,11 @@ class Img(models.Model):
 
 class PerevalAdded(models.Model):
 
-    status_list = ( ('new', 'новый'),('pending', 'в работе'), ('accepted', 'принят'), ('rejected', 'отклонён'))
-    difficult_list = (('1a', '1А'), ('1b', '1Б'), ('2a', '2А'), ('2b', '2Б'), ('3a', '3А'), ('3b', '3Б'),
+    status_list = (('new', 'новый'),('pending', 'в работе'), ('accepted', 'принят'), ('rejected', 'отклонён'))
+    difficult_list = (('', 'не указано'), ('1a', '1А'), ('1b', '1Б'), ('2a', '2А'), ('2b', '2Б'), ('3a', '3А'), ('3b', '3Б'),
                       ('4a', '4А'),('4b', '4Б'), ('5a', '5А'), ('5b', '5Б'), ('6a', '6А'), ('6b', '6Б'))
 
-    status = models.CharField( default='new', choices=status_list, verbose_name='статус модерации')
+    status = models.CharField( default='new', blank=False, choices=status_list, verbose_name='статус модерации')
     point = models.OneToOneField(Coords, verbose_name='Координаты',related_name= 'xyz', on_delete=models.CASCADE)
     images = models.OneToOneField(Img, on_delete=models.CASCADE )
     beautyTitle = models.CharField(max_length=200, verbose_name='тип объекта', blank=False)
@@ -41,7 +41,7 @@ class PerevalAdded(models.Model):
     connect_other_titles = models.CharField(max_length=200, verbose_name='что соединяет', blank=True)
     add_time = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(Uzers, on_delete=models.CASCADE)
-    level_winter = models.CharField(choices=difficult_list, blank=True, verbose_name='зима')
-    level_summer = models.CharField(choices=difficult_list, blank=True, verbose_name='лето')
+    level_winter = models.CharField(choices=difficult_list, blank=True,null=True, verbose_name='зима')
+    level_summer = models.CharField(choices=difficult_list, blank=True,null=True, verbose_name='лето')
 
 

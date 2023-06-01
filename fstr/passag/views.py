@@ -6,7 +6,7 @@ from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework.renderers import JSONRenderer
-
+from django.http import HttpResponse
 
 from .serializers import *
 from .models import *
@@ -20,9 +20,15 @@ class PerevalAddedViewset(ListAPIView):
    serializer_class = PerevalAddedSerializer
 
    def get(self, request):
-         return Response()
+         mail_filtor = request.GET.get('user__email')
+         filtered_by_mail_list = PerevalAdded.objects.filter(user__email = mail_filtor)
+         f_list = PerevalAddedSerializer(data=filtered_by_mail_list, many=True)
+         f_list.is_valid()
+
+         return Response(f_list.data)
 
    def post(self, request):
+
       serializer = PerevalAddedSerializer(data=request.data)
       state = 400
       pk = None
@@ -41,6 +47,8 @@ class PerevalDetails(GenericAPIView):
         pass_sr = PerevalAddedSerializer(passage)
 
         return Response(pass_sr.data)
+
+
 
     def patch(self, request, pk):
         self.serializer_class = PerevalPatchSerializer
