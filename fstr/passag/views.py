@@ -14,7 +14,9 @@ from .models import *
 class UzersViewset(viewsets.ModelViewSet):
    queryset = Uzers.objects.all()
    serializer_class = UzersSerializer
-
+class PerevalList(ListAPIView):
+   queryset = PerevalAdded.objects.all()
+   serializer_class = PerevalAddedSerializer
 class PerevalAddedViewset(ListAPIView):
    queryset = PerevalAdded.objects.all()
    serializer_class = PerevalAddedSerializer
