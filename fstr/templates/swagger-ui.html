@@ -21,6 +21,9 @@ charset="utf-8"/>
        layout: "BaseLayout",
        requestInterceptor: (request) => {
          request.headers['X-CSRFToken'] = "{{ csrf_token }}"
+         request.url = request.url
+            .replace('%40', '@');
+            request.curlOptions = ['-g'];
          return request;
        }
      })
