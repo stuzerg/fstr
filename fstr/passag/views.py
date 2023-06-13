@@ -45,18 +45,20 @@ class PerevalDetails(GenericAPIView):
 
     def get(self, request, pk):
         self.serializer_class = PerevalAddedSerializer
-        passage = PerevalAdded.objects.get(pk=pk)
-        pass_sr = PerevalAddedSerializer(passage)
-
-        return Response(pass_sr.data)
-
+        if pk in PerevalAdded.objects.all().values_list('pk', flat = True):
+            passage = PerevalAdded.objects.get(pk=pk)
+            pass_sr = PerevalAddedSerializer(passage)
+            return Response(pass_sr.data)
+        else:
+            print("записи не существует")
+            return Response({'status':400, "message": 'записи не существует', 'id': pk})
 
 
     def patch(self, request, pk):
         self.serializer_class = PerevalPatchSerializer
         instance = PerevalAdded.objects.get(pk=pk)
         if instance.status != 'new':
-            return Response({'state': 0, 'message': 'Отредактировать невозможно - статус записи не new'})
+            return Response(data={'state': 0, 'message': 'Отредактировать невозможно - статус записи не new'}, status=403)
 
         serializer = PerevalPatchSerializer(data=request.data, instance=instance, partial=True)
 

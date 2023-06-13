@@ -5,25 +5,33 @@ class Uzers(models.Model):
     name = models.CharField(max_length=20, help_text='обязательное поле',verbose_name='Имя', blank=False)
     patronymic = models.CharField(max_length=20, help_text='обязательное поле',verbose_name='Отчество', blank=False)
     email = models.EmailField(max_length=50, help_text='обязательное поле',verbose_name='эл.почта', blank=False, unique=True)
-    cell = models.IntegerField(help_text='обязательное поле в формате 7903ххххххх', blank=False, verbose_name='сотовый')
+    cell = models.BigIntegerField(help_text='обязательное поле в формате 7903ххххххх', blank=False, verbose_name='сотовый')
     def __str__(self):
-        return self.email
+        s = '{' + f'"family": "{self.family}", "name": "{self.name}", "patronymic": "{self.patronymic}",' \
+                  f'"email": "{self.email}", "cell": {self.cell}' + '}'
+        return s
 
 class Coords(models.Model):
     longitude = models.FloatField(help_text='обязательное поле',blank=False, verbose_name='долгота')
     latitude = models.FloatField(help_text='обязательное поле',blank=False, verbose_name='широта')
     height = models.IntegerField(help_text='обязательное поле',blank=False, verbose_name='высота')
     def __str__(self):
-        return f'{self.longitude}° широты, {self.latitude}° долготы'
+        s = '{'+ f'"longitude": {self.longitude}, "latitude": {self.latitude}, "height": {self.height}'+'}'
+        return s
 
 
 class Img(models.Model):
     about_1 = models.CharField(help_text='обязательное поле', max_length=100, verbose_name='описание фото_1', blank=False)
     pic_1 = models.URLField(help_text='обязательное поле, url фото', verbose_name='ссылка на фото_1', blank=False)
-    about_2 = models.CharField(max_length=100, verbose_name='описание фото_2', blank=True)
-    pic_2 = models.URLField(verbose_name='ссылка на фото_2', blank=True)
-    about_3 = models.CharField(max_length=100, verbose_name='описание фото_3', blank=True)
-    pic_3 = models.URLField(verbose_name='ссылка на фото_3', blank=True)
+    about_2 = models.CharField(default='', max_length=100, verbose_name='описание фото_2', blank=True)
+    pic_2 = models.URLField(default='', verbose_name='ссылка на фото_2', blank=True)
+    about_3 = models.CharField(default='', max_length=100, verbose_name='описание фото_3', blank=True)
+    pic_3 = models.URLField(default='', verbose_name='ссылка на фото_3', blank=True)
+
+    def __str__(self):
+        s = '{' + f'"about_1": "{self.about_1}", "pic_1": "{self.pic_1}", "about_2": "{self.about_2}",' \
+                  f'"pic_2": "{self.pic_2}", "about_3": "{self.about_3}", "pic_3": "{self.pic_3}"' + '}'
+        return s
 
 
 class PerevalAdded(models.Model):
@@ -41,7 +49,7 @@ class PerevalAdded(models.Model):
     connect_other_titles = models.CharField(max_length=200, verbose_name='что соединяет', blank=True)
     add_time = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(Uzers, on_delete=models.CASCADE)
-    level_winter = models.CharField(choices=difficult_list, blank=True,null=True, verbose_name='зима')
-    level_summer = models.CharField(choices=difficult_list, blank=True,null=True, verbose_name='лето')
+    level_winter = models.CharField(default='',choices=difficult_list, blank=True,null=True, verbose_name='зима')
+    level_summer = models.CharField(default='',choices=difficult_list, blank=True,null=True, verbose_name='лето')
 
 

@@ -1,53 +1,225 @@
-openapi: 3.0.2
-
+openapi: "3.0.2"
 info:
- title: 'Some application'
- version: '0.1'
+  title: "FSTR API"
+  description: "Внесение данных по перевалам"
+  version: "1.0"
+
+servers:
+- url: http://localhost:8000
+
 paths:
- /schools/:
-   get:
-     operationId: listSchools
-     description: 'List of schools'
-     parameters: []
-     responses:
-       '200':
-         content:
-           application/json:
-             schema:
-               type: array
-               items:
-                 $ref: '#/components/schemas/School'
-         description: ''
-     tags:
-     - schools
-   post:
-     operationId: createSchool
-     description: 'Create school'
-     parameters: []
-     requestBody:
-       content:
-         application/json:
-           schema:
-             $ref: '#/components/schemas/School'
-     responses:
-       '201':
-         content:
-           application/json:
-             schema:
-               $ref: '#/components/schemas/School'
-         description: ''
-     tags:
-     - schools
+  /pereval/:
+    get:
+      tags:
+      - list of all passages
+      summary: "Список всех перевалов БД"
+      description: "вызывается без ключа"
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/Perevallist'
+  /pereval/submitData/{id}:
+    get:
+      tags:
+        - passage info
+      summary: "сведения о перевале"
+      description: "вызывается с ключом"
+      parameters:
+        - name: id
+          in: path
+          required: True
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Perevallist'
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PerevalAdded'
+    patch:
+      tags:
+        - passage editing
+      summary: "редактировать запись о перевале"
+      description: "вызывается с ключом"
+      parameters:
+        - name: id
+          in: path
+          required: True
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Perevallist'
+
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Perevallist'
+
+
+  /pereval/submitData/:
+    get:
+      tags:
+        - list by email
+      summary: "Список перевалов по email ключу"
+      description: "вызывается с ключом"
+      parameters:
+        - name: user__email
+          type: string
+          in: query
+          required: True
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Perevallist'
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PerevalAdded'
+    post:
+      tags:
+      - passage adding
+      summary: "Внесение данных о перевале"
+      description: "вызывается без ключа"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PerevalAdded'
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/PerevalAdded'
+
+
+
+
 components:
-   schemas:
-     School:
-       type: object
-       properties:
-         id:
-           type: integer
-           readOnly: true
-         name:
-           type: string
-           maxLength: 64
-       required:
-       - name
+  schemas:
+    imgs:
+      type: object
+      properties:
+        about_1:
+          type: string
+        pic_1:
+          type: string
+        about_2:
+          type: string
+        pic_2:
+          type: string
+        about_3:
+          type: string
+        pic_3:
+          type: string
+    uzer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        family:
+          type: string
+        name:
+          type: string
+        patronymic:
+          type: string
+        email:
+          type: string
+        cell:
+          type: integer
+
+    coords:
+      type: object
+      properties:
+        longitude:
+          type: float
+        latitude:
+          type: float
+        height:
+          type: integer
+
+    Perevallist:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 64
+        status:
+          type: string
+          maxLength: 20
+        point:
+          $ref: '#/components/schemas/coords'
+        images:
+          $ref: '#/components/schemas/imgs'
+        beautyTitle:
+          type: string
+        other_titles:
+          type: string
+        connect_other_titles:
+          type: string
+        add_time :
+          type: string
+          readOnly: true
+        user:
+          $ref: '#/components/schemas/uzer'
+
+        level_winter:
+          type: string
+        level_summer :
+          type: string
+
+    PerevalAdded:
+      type: object
+      properties:
+
+        title:
+          type: string
+          maxLength: 64
+        point:
+          $ref: '#/components/schemas/coords'
+        images:
+           $ref: '#/components/schemas/imgs'
+        beautyTitle:
+          type: string
+        other_titles:
+          type: string
+        connect_other_titles:
+          type: string
+        add_time:
+          type: string
+          readOnly: true
+        user:
+          $ref: '#/components/schemas/uzer'
+        level_winter:
+          type: string
+        level_summer:
+          type: string
