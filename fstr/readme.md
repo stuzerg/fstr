@@ -1,10 +1,10 @@
 # Федерация спортивного туризма России
 
-------
+
 пополнение базы данных горных перевалов России с привлечением краудфандинга </br>
 основная таблица - это `PerevalAdded`,</br>
 связанная с тремя таблицами `Coords` `Img` `Uzers` 
----
+------
 ## таблица `PerevalAdded` :
 поле | обязательное поле | описание   | значения
 ---|:-----------------:|------------|---
@@ -19,14 +19,14 @@
 **`user`** |        да         | пользователь | связь ForeignKey с таблицей Uzers
 **`level_winter`** |        нет        | уровень сложности в зимний период | от 1a до 6b (отображается от 1А до 6Б)
 **`level_summer`** |        нет        | уровень сложности в летний период | от 1a до 6b (отображается от 1А до 6Б)
-
+------
 ## таблица `Coords`:
 поле | обязательное поле |    описание | значения
 ---|:------------:|------------|---
  **`longitude`** | да |     долгота | тип float
  **`latitude`** | да |      широта | тип float                
  **`height`**  | да |      высота | тип integer               
-
+------
 ## таблица `Uzers`:
 поле | обязательное поле |    описание | значения
 ---|:------------:|----------|---
@@ -35,7 +35,7 @@
 **`patronymic`**|да | отчество |
 **`email`**|да | эл.почта | уникальное значение
 **`cell`**|да | сотовый |
-
+------
 ## таблица `Img`:
 поле | обязательное поле |          описание          | значения
 ---|:-----------------:|:--------------------------:|---
@@ -57,35 +57,36 @@
       данные передаются в JSONе, можно отправлять только редактируемые пары JSON-объекта</br>
       - при текущем значении поля **status** отличном от **new**, изменения не вносятся
       - данные о пользователе не редактируются
-   3. ### метод **`POST`** 
-      `/pereval/submitData/` - добавление новой записи в формате **JSON**:<br>   
-      {  <br>
-       "point": { <br>
-       "longitude": "7.1525",<br>
-       "latitude": "45.3842",<br>
-       "height": 1200<br>
-     },<br>
-     "images": {<br>
-       "about_1": "Седловина",<br>
-       "pic_1": "https://pibig.info/uploads/posts/2022-11/1669749986_1-pibig-info-p-pkhiya-krasivo-1.jpg", <br>
-       "about_2": "",<br>
-       "pic_2": "",<br>
-       "about_3": "",<br>
-       "pic_3": ""<br>
-     },<br>
-     "title": "Пхия",<br>
-     "beautyTitle": "перевал",<br>
-     "other_titles": "",<br>
-     "connect_other_titles": "",<br>
-     "user": {<br>
-       "family": "Пупкин",<br>
-       "name": "Василий",<br>
-       "patronymic": "Иванович",<br>
-       "email": "user@email.tld",<br>
-       "cell": 79031234567<br>
-     },<br>
-     "level_winter": "",<br>
-     "level_summer": "1a"<br>
-     }<br>
+3. ### метод **`POST`** 
+   `/pereval/submitData/` - добавление новой записи в формате **JSON**:<br>   
+   {  <br>
+    "point": { <br>
+    "longitude": "7.1525",<br>
+    "latitude": "45.3842",<br>
+    "height": 1200<br>
+  },<br>
+  "images": {<br>
+    "about_1": "Седловина",<br>
+    "pic_1": "https://pibig.info/uploads/posts/2022-11/1669749986_1-pibig-info-p-pkhiya-krasivo-1.jpg", <br>
+    "about_2": "",<br>
+    "pic_2": "",<br>
+    "about_3": "",<br>
+    "pic_3": ""<br>
+  },<br>
+  "title": "Пхия",<br>
+  "beautyTitle": "перевал",<br>
+  "other_titles": "",<br>
+  "connect_other_titles": "",<br>
+  "user": {<br>
+    "family": "Пупкин",<br>
+    "name": "Василий",<br>
+    "patronymic": "Иванович",<br>
+    "email": "user@email.tld",<br>
+    "cell": 79031234567<br>
+  },<br>
+  "level_winter": "",<br>
+  "level_summer": "1a"<br>
+  }<br>
    
-Также можно руководствоваться документацией  [**swagger**](https://stutzerg.pythonanywhere.com/swagger-ui)
+Также можно руководствоваться документацией  [**swagger**](https://stutzerg.pythonanywhere.com/swagger-ui)<br>
+Хостинг https://stutzerg.pythonanywhere.com/pereval/
